@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Practical-machine-learning-assignment : Practical Machine Learning Assignment">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Practical-machine-learning-assignment</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Beaufort61/Practical-Machine-Learning-Assignment">View on GitHub</a>
+
+          <h1 id="project_title">Practical-machine-learning-assignment</h1>
+          <h2 id="project_tagline">Practical Machine Learning Assignment</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Beaufort61/Practical-Machine-Learning-Assignment/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Beaufort61/Practical-Machine-Learning-Assignment/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>&lt;!DOCTYPE html&gt;</p>
+
+<p>
+</p>
+
+
+
+<p></p>Quantified Self Movement Assignment
+
+
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {   
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+
+
+
+
+
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+
+
+
+
+
+
+<p></p>
+
+<p></p>
+
+<h1>
+<a id="quantified-self-movement-assignment" class="anchor" href="#quantified-self-movement-assignment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quantified Self Movement Assignment</h1>
+
+<h1>
+<a id="synopsis" class="anchor" href="#synopsis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Synopsis</h1>
+
+<p>The goal of this project is to predict the manner in which 6 participants did an exercise.  Data was captured using accelerometers on the belt, forearm, arm, and dumbell of the participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website: <a href="http://groupware.les.inf.puc-rio.br/har">http://groupware.les.inf.puc-rio.br/har</a></p>
+
+<p>The assignment tasks are:</p>
+
+<ul>
+<li>The “classe” variable in the training set represents the manner they performed the exercise. Develop a predictive model for “classe” using any of the other variables in the dataset. </li>
+<li>Create a report describing how the model was built.  Describe
+
+<ul>
+<li>how cross validation was used</li>
+<li>the expected out of sample error</li>
+<li>the rationale behind any choices made</li>
+</ul>
+</li>
+<li>Use the prediction model to predict 20 different test cases. </li>
+</ul>
+
+<h1>
+<a id="data-processing" class="anchor" href="#data-processing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Processing</h1>
+
+<h3>
+<a id="initial-analysis" class="anchor" href="#initial-analysis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initial Analysis</h3>
+
+<pre><code>pmltraining &lt;- read.csv("pml-training.csv")
+
+# Make a data frame of all columns which have any missing data
+colsWithMissingData &lt;- pmltraining[,colSums(is.na(pmltraining)) &gt; 0]
+
+# We now show these records either contain no data at all or are complete cases
+rowsWithNoData &lt;- colsWithMissingData[rowSums(is.na(colsWithMissingData)) == length(colsWithMissingData), ]
+rowsWithCompleteData &lt;- colsWithMissingData[complete.cases(colsWithMissingData),]
+stopifnot( nrow(colsWithMissingData) == nrow(rowsWithNoData) + nrow(rowsWithCompleteData) )
+
+complete &lt;- pmltraining[complete.cases(pmltraining),]
+stopifnot( nrow(complete[complete$new_window=="no",]) == 0 )
+</code></pre>
+
+<p>As shown above, analysis of the dataset reveals that there are two types of record based on the value of new_window, as follows:</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">New Window</th>
+<th align="right">Number of rows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">yes</td>
+<td align="right">406</td>
+</tr>
+<tr>
+<td align="right">no</td>
+<td align="right">19216</td>
+</tr>
+</tbody>
+</table>
+
+<p>There are 67 columns that only have data when new_window = “yes”.  Given the need to reduce the number of predictors, we shall ignore these columns.  Also, given the new_window = “yes” rows represent only 2% of the data and may skew the prediction, we shall ignore these rows when creating the prediction algorithm.</p>
+
+<h3>
+<a id="initial-data-preparation" class="anchor" href="#initial-data-preparation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initial Data Preparation</h3>
+
+<pre><code># Remove columns with any blank or NA values
+pmltraining &lt;- read.csv("pml-training.csv", na.strings=c("#DIV/0!", "NA", ""))
+pmltraining &lt;- pmltraining[,colSums(is.na(pmltraining)) == 0]
+
+# Remove rows with new_window == "yes"
+pmltraining &lt;- pmltraining[pmltraining$new_window == "no",]
+
+# Remove non-sensory data
+pmltraining &lt;- subset(pmltraining, select = -c(X,user_name,raw_timestamp_part_1,raw_timestamp_part_2,cvtd_timestamp,new_window,num_window))
+</code></pre>
+
+<p>As shown above, we apply the filtering from our initial analysis and also remove non-sensory data as this is a poor predictor of activity type.  However, we still have 52 predictors.  We will need to reduce the number based upon predictor correlation.</p>
+
+<h3>
+<a id="prepare-cross-validation" class="anchor" href="#prepare-cross-validation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prepare cross validation</h3>
+
+<p>Since we will use a random forest algorithm, there is no need for a set-aside testing set</p>
+
+<h1>
+<a id="identifying-suitable-predictors" class="anchor" href="#identifying-suitable-predictors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Identifying Suitable Predictors</h1>
+
+<p>We first remove predictors with 80% or higher correlation with other predictors.  These were identified using the technique shown below, which is now used to show that the correlated predictors have been successfully removed.</p>
+
+<pre><code>training &lt;- pmltraining
+# 90% correlation
+training &lt;- subset(training, select = -c(accel_belt_x, accel_belt_y, accel_belt_z, roll_belt, gyros_arm_y, gyros_forearm_z, gyros_dumbbell_z))
+# 80% correlation
+training &lt;- subset(training, select = -c(magnet_belt_x, magnet_arm_x, magnet_arm_z, pitch_dumbbell, yaw_dumbbell))
+predictors &lt;- subset(training, select = -c(classe))
+M &lt;- abs(cor(predictors))
+diag(M) &lt;- 0
+which( M &gt; 0.8, arr.ind = T)
+</code></pre>
+
+<pre><code>##      row col
+</code></pre>
+
+<p>At this point we have 40 predictors.  I attempted to apply a CART prediction algorithm using these predicators, but found its performance was poor. So I decided to reduce the number of predictors further and use the random forest technique.  We now remove predictors with 40% or higher cross-correlation:</p>
+
+<pre><code># 60% correlation
+training &lt;- subset(training, select = -c(yaw_belt, total_accel_belt, accel_arm_y, magnet_dumbbell_x, magnet_dumbbell_y, magnet_belt_z, accel_arm_z, magnet_arm_y, accel_dumbbell_x, accel_dumbbell_y, accel_dumbbell_z, accel_forearm_z, magnet_forearm_x, gyros_dumbbell_y, gyros_forearm_y, magnet_forearm_y))
+# 40% correlation
+training &lt;- subset(training, select = -c(gyros_belt_x, gyros_belt_y, gyros_forearm_x, gyros_arm_z, yaw_arm, accel_arm_x, accel_forearm_x, yaw_forearm, gyros_arm_z, pitch_forearm, magnet_dumbbell_z,roll_forearm))
+predictors &lt;- subset(training, select = -c(classe))
+M &lt;- abs(cor(predictors))
+diag(M) &lt;- 0
+which( M &gt; 0.4, arr.ind = T)
+</code></pre>
+
+<pre><code>##      row col
+</code></pre>
+
+<h1>
+<a id="creating-the-prediction-algorithm" class="anchor" href="#creating-the-prediction-algorithm" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating the Prediction Algorithm</h1>
+
+<p>This prediction algorithm takes 15 minutes to generate, so is saved to modFit.Rda which must be deleted to regenerate.</p>
+
+<pre><code>if (file.exists("modFit.Rda")) {
+  load("modFit.Rda")
+} else {
+  modFit &lt;- train( classe~., method="rf", data=training )
+  save(modFit, file="modFit.Rda")
+}
+</code></pre>
+
+<h3>
+<a id="cross-validation" class="anchor" href="#cross-validation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cross validation</h3>
+
+<p>The Out-Of-Bag (OOB) estimate of error rate is calculated below.  This is a cross validation measure provided by the random forest algorithm.  Using the out-of-bag error estimate removes the need for a set aside test set.  In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally, during the run.</p>
+
+<pre><code>load("modFit.Rda")
+modFit$finalModel
+</code></pre>
+
+<pre><code>## 
+## Call:
+##  randomForest(x = x, y = y, mtry = param$mtry) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 2
+## 
+##         OOB estimate of  error rate: 1.9%
+## Confusion matrix:
+##      A    B    C    D    E class.error
+## A 5403   10   37   19    2 0.012429172
+## B   47 3595   58   15    3 0.033082302
+## C   16   30 3285   19    2 0.019988067
+## D   14    1   69 3060    3 0.027645377
+## E    4    3    8    5 3508 0.005668934
+</code></pre>
+
+<h3>
+<a id="applying-the-prediction-to-the-supplied-test-dataset" class="anchor" href="#applying-the-prediction-to-the-supplied-test-dataset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying the prediction to the supplied test dataset</h3>
+
+<p>Using our algorithm, we now write out the activities predicted for the test set records for submission.  19 out of 20 were correctly identified.</p>
+
+<pre><code>pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+
+load("modFit.Rda")
+pmltesting &lt;- read.csv("pml-testing.csv", na.strings=c("#DIV/0!", "NA", ""))
+answers &lt;- predict(modFit, pmltesting)
+pml_write_files(answers)
+answers
+</code></pre>
+
+<pre><code>##  [1] A A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E
+</code></pre>
+
+<p></p>
+
+<p></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Practical-machine-learning-assignment maintained by <a href="https://github.com/Beaufort61">Beaufort61</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
