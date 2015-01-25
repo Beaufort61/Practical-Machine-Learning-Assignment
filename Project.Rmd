@@ -1,0 +1,144 @@
+# Quantified Self Movement Assignment
+
+# Synopsis
+The goal of this project is to predict the manner in which 6 participants did an exercise.  Data was captured using accelerometers on the belt, forearm, arm, and dumbell of the participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website: http://groupware.les.inf.puc-rio.br/har
+
+The assignment tasks are:
+* The "classe" variable in the training set represents the manner they performed the exercise. Develop a predictive model for "classe" using any of the other variables in the dataset. 
+* Create a report describing how the model was built.  Describe
+   + how cross validation was used
+   + the expected out of sample error
+   + the rationale behind any choices made
+* Use the prediction model to predict 20 different test cases. 
+
+# Data Processing
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache = TRUE}
+opts_chunk$set(echo=TRUE)
+options(rpubs.upload.method = "internal")
+setwd("E:\\Practical Machine Learning\\Project")
+options(digits=12)
+options(scipen=10)
+library(caret)
+```
+
+
+### Initial Analysis
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+pmltraining <- read.csv("pml-training.csv")
+
+# Make a data frame of all columns which have any missing data
+colsWithMissingData <- pmltraining[,colSums(is.na(pmltraining)) > 0]
+
+# We now show these records either contain no data at all or are complete cases
+rowsWithNoData <- colsWithMissingData[rowSums(is.na(colsWithMissingData)) == length(colsWithMissingData), ]
+rowsWithCompleteData <- colsWithMissingData[complete.cases(colsWithMissingData),]
+stopifnot( nrow(colsWithMissingData) == nrow(rowsWithNoData) + nrow(rowsWithCompleteData) )
+
+complete <- pmltraining[complete.cases(pmltraining),]
+stopifnot( nrow(complete[complete$new_window=="no",]) == 0 )
+```
+
+As shown above, analysis of the dataset reveals that there are two types of record based on the value of new_window, as follows:
+
+|  New Window       |  Number of rows  |
+|------------------:|-----------------:|
+|                yes|`r nrow(pmltraining[pmltraining$new_window=="yes",])` |
+|                 no|`r nrow(pmltraining[pmltraining$new_window=="no",])` |
+
+There are `r ncol(colsWithMissingData)` columns that only have data when new_window = "yes".  Given the need to reduce the number of predictors, we shall ignore these columns.  Also, given the new_window = "yes" rows represent only `r sprintf("%.0f",100 * nrow(pmltraining[pmltraining$new_window=="yes",])/nrow(pmltraining))`% of the data and may skew the prediction, we shall ignore these rows when creating the prediction algorithm.
+
+
+### Initial Data Preparation
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+# Remove columns with any blank or NA values
+pmltraining <- read.csv("pml-training.csv", na.strings=c("#DIV/0!", "NA", ""))
+pmltraining <- pmltraining[,colSums(is.na(pmltraining)) == 0]
+
+# Remove rows with new_window == "yes"
+pmltraining <- pmltraining[pmltraining$new_window == "no",]
+
+# Remove non-sensory data
+pmltraining <- subset(pmltraining, select = -c(X,user_name,raw_timestamp_part_1,raw_timestamp_part_2,cvtd_timestamp,new_window,num_window))
+```
+
+As shown above, we apply the filtering from our initial analysis and also remove non-sensory data as this is a poor predictor of activity type.  However, we still have `r ncol(pmltraining) - 1` predictors.  We will need to reduce the number based upon predictor correlation.
+
+### Prepare cross validation
+
+Since we will use a random forest algorithm, there is no need for a set-aside testing set
+
+# Identifying Suitable Predictors 
+
+We first remove predictors with 80% or higher correlation with other predictors.  These were identified using the technique shown below, which is now used to show that the correlated predictors have been successfully removed.
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+training <- pmltraining
+# 90% correlation
+training <- subset(training, select = -c(accel_belt_x, accel_belt_y, accel_belt_z, roll_belt, gyros_arm_y, gyros_forearm_z, gyros_dumbbell_z))
+# 80% correlation
+training <- subset(training, select = -c(magnet_belt_x, magnet_arm_x, magnet_arm_z, pitch_dumbbell, yaw_dumbbell))
+predictors <- subset(training, select = -c(classe))
+M <- abs(cor(predictors))
+diag(M) <- 0
+which( M > 0.8, arr.ind = T)
+```
+
+At this point we have `r ncol(training) - 1` predictors.  I attempted to apply a CART prediction algorithm using these predicators, but found its performance was poor. So I decided to reduce the number of predictors further and use the random forest technique.  We now remove predictors with 40% or higher cross-correlation:
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+# 60% correlation
+training <- subset(training, select = -c(yaw_belt, total_accel_belt, accel_arm_y, magnet_dumbbell_x, magnet_dumbbell_y, magnet_belt_z, accel_arm_z, magnet_arm_y, accel_dumbbell_x, accel_dumbbell_y, accel_dumbbell_z, accel_forearm_z, magnet_forearm_x, gyros_dumbbell_y, gyros_forearm_y, magnet_forearm_y))
+# 40% correlation
+training <- subset(training, select = -c(gyros_belt_x, gyros_belt_y, gyros_forearm_x, gyros_arm_z, yaw_arm, accel_arm_x, accel_forearm_x, yaw_forearm, gyros_arm_z, pitch_forearm, magnet_dumbbell_z,roll_forearm))
+predictors <- subset(training, select = -c(classe))
+M <- abs(cor(predictors))
+diag(M) <- 0
+which( M > 0.4, arr.ind = T)
+```
+
+# Creating the Prediction Algorithm
+
+This prediction algorithm takes 15 minutes to generate, so is saved to modFit.Rda which must be deleted to regenerate.
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+if (file.exists("modFit.Rda")) {
+  load("modFit.Rda")
+} else {
+  modFit <- train( classe~., method="rf", data=training )
+  save(modFit, file="modFit.Rda")
+}
+```
+
+### Cross validation
+
+The Out-Of-Bag (OOB) estimate of error rate is calculated below.  This is a cross validation measure provided by the random forest algorithm.  Using the out-of-bag error estimate removes the need for a set aside test set.  In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally, during the run.
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+load("modFit.Rda")
+modFit$finalModel
+```
+
+### Applying the prediction to the supplied test dataset 
+
+Using our algorithm, we now write out the activities predicted for the test set records for submission.  19 out of 20 were correctly identified.
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE, cache = TRUE}
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+
+load("modFit.Rda")
+pmltesting <- read.csv("pml-testing.csv", na.strings=c("#DIV/0!", "NA", ""))
+answers <- predict(modFit, pmltesting)
+pml_write_files(answers)
+answers
+```
+
+
